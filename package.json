@@ -1,6 +1,29 @@
 {
-  "name":"ramforge-command","version":"1.0.0","private":true,
-  "scripts":{"dev":"next dev","build":"next build","start":"next start","lint":"tsc --noEmit"},
-  "dependencies":{"next":"16.0.1","react":"19.2.0","react-dom":"19.2.0","lucide-react":"0.468.0","@supabase/supabase-js":"2.80.0"},
-  "devDependencies":{"typescript":"5.9.3","@types/node":"22.18.0","@types/react":"19.2.2","@types/react-dom":"19.2.2"}
+  "name": "ramforge-command",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
+    "lucide-react": "0.468.0",
+    "next": "^16.4.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "22.18.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
+  }
 }
