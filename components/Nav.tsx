@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Activity, BookOpen, ClipboardList, LayoutDashboard, Settings2, ShieldCheck, Users } from 'lucide-react';
+import { Activity, BookOpen, ClipboardList, FlaskConical, LayoutDashboard, Settings2, ShieldCheck, Users } from 'lucide-react';
 
 export const NAV = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
@@ -10,6 +10,7 @@ export const NAV = [
   { href: '/runs', label: 'Agent runs', icon: Activity },
   { href: '/knowledge', label: 'Knowledge', icon: BookOpen },
   { href: '/approvals', label: 'Approvals', icon: ShieldCheck },
+  { href: '/contextforge', label: 'ContextForge', icon: FlaskConical },
   { href: '/settings', label: 'Settings', icon: Settings2 },
 ];
 

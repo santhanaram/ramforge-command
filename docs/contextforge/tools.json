@@ -1,0 +1,242 @@
+[
+  {
+    "id": "T-01",
+    "name": "Headroom",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-02",
+    "name": "Graphify",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-03",
+    "name": "Ponytail",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-04",
+    "name": "Codeburn",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-05",
+    "name": "Tiktoken",
+    "repository": "https://github.com/openai/tiktoken",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-06",
+    "name": "LLMLingua",
+    "repository": "https://github.com/microsoft/LLMLingua",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-07",
+    "name": "GPTCache",
+    "repository": "https://github.com/zilliztech/GPTCache",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-08",
+    "name": "LiteLLM",
+    "repository": "https://github.com/BerriAI/litellm",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-09",
+    "name": "Outlines",
+    "repository": "https://github.com/dottxt-ai/outlines",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-10",
+    "name": "vLLM",
+    "repository": "https://github.com/vllm-project/vllm",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-11",
+    "name": "OpenHands",
+    "repository": "https://github.com/OpenHands/OpenHands",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-12",
+    "name": "OmniRoute",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-13",
+    "name": "Meetily",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-14",
+    "name": "Awesome Design MD",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-15",
+    "name": "Agent Skills",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-16",
+    "name": "OfficeCLI",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-17",
+    "name": "OpenWiki",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-18",
+    "name": "Strix",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-19",
+    "name": "Caveman",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-20",
+    "name": "Agency Agents",
+    "repository": null,
+    "verification": "unverified_identity",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-21",
+    "name": "Firecrawl",
+    "repository": "https://github.com/firecrawl/firecrawl",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-22",
+    "name": "Crawl4AI",
+    "repository": "https://github.com/unclecode/crawl4ai",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-23",
+    "name": "Browser Use",
+    "repository": "https://github.com/browser-use/browser-use",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-24",
+    "name": "Crawlee",
+    "repository": "https://github.com/apify/crawlee",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-25",
+    "name": "Scrapy",
+    "repository": "https://github.com/scrapy/scrapy",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-26",
+    "name": "MarkItDown",
+    "repository": "https://github.com/microsoft/markitdown",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-27",
+    "name": "Scrapling",
+    "repository": "https://github.com/D4Vinci/Scrapling",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-28",
+    "name": "scrcpy",
+    "repository": "https://github.com/Genymobile/scrcpy",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-29",
+    "name": "AutoScraper",
+    "repository": "https://github.com/alirezamika/autoscraper",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  },
+  {
+    "id": "T-30",
+    "name": "curl-impersonate",
+    "repository": "https://github.com/lwthiker/curl-impersonate",
+    "verification": "candidate_link_review_required",
+    "enabled": false,
+    "approval_required": true
+  }
+]
