@@ -1,26 +1,36 @@
 import { PageHeader } from '@/components/PageHeader';
+import { TokenCounter } from '@/components/TokenCounter';
 import {
-  acceptanceCriteria, approvalClasses, candidateTools, forgeLeads, leadCharter, phases, securityRules, verificationLabel, workflow,
+  SOURCE_CHECKED_ON, acceptanceCriteria, approvalClasses, candidateTools, forgeLeads, leadCharter, phases, securityRules, toolStatus, workflow,
 } from '@/data/contextforge';
+
+const stateTag = { live: ['good', 'Live'], off: ['', 'Off'], blocked: ['bad', 'Blocked'] } as const;
 
 export const metadata = { title: 'ContextForge | RAMFORGE Command' };
 
 export default function ContextForgePage() {
-  const withLink = candidateTools.filter((t) => t.repository).length;
-  const enabled = candidateTools.filter((t) => t.enabled).length;
+  const live = candidateTools.filter((t) => toolStatus[t.id].state === 'live');
+  const sourced = candidateTools.filter((t) => toolStatus[t.id].source).length;
+  const noSource = candidateTools.filter((t) => !t.repository).length;
   return (
     <>
-      <PageHeader eyebrow="ContextForge" title="ContextForge AI Research Lab" intro="A planned research orchestration lab: candidate tools, five governance leads, approval classes and a phased build plan. This tab shows the plan. Nothing in it is installed or running." />
+      <PageHeader eyebrow="ContextForge" title="ContextForge AI Research Lab" intro="A planned research orchestration lab: candidate tools, five governance leads, approval classes and a phased build plan. One tool is connected and working. The rest are planned." />
       <div className="alert sim" role="note">
-        Planning view only. No tool on this page is installed, connected or enabled, and no crawling, browsing or model call happens here. Repository links are candidates that still need an identity and licence check, not verified or endorsed projects.
+        Mostly a plan. Only the tool marked Live works, and it runs in your browser. No crawling, browsing or model call happens on this page. A source check means the package registry points to the same repository. It is not a full licence, security or endorsement review.
       </div>
 
       <div className="cards" style={{ marginTop: 20 }}>
         <div className="metric"><span>Candidate tools</span><strong>{candidateTools.length}</strong><span>Registered for review</span></div>
-        <div className="metric"><span>Enabled tools</span><strong>{enabled}</strong><span>All stay off until reviewed and approved</span></div>
-        <div className="metric"><span>With a candidate link</span><strong>{withLink}</strong><span>{candidateTools.length - withLink} still have no confirmed identity</span></div>
+        <div className="metric"><span>Live tools</span><strong>{live.length}</strong><span>{live.map((t) => t.name).join(', ')}, running in your browser</span></div>
+        <div className="metric"><span>Source checked</span><strong>{sourced}</strong><span>{noSource} have no repository to check</span></div>
         <div className="metric"><span>Governance leads</span><strong>{forgeLeads.length}</strong><span>Agents propose, humans authorise</span></div>
       </div>
+
+      <section className="panel" aria-labelledby="cf-tokens">
+        <div className="secrow"><h2 id="cf-tokens">Token counter</h2><span className="tag good">Live: Tiktoken, in your browser</span></div>
+        <p className="small">Counts how many tokens a piece of text uses, which is how AI models measure length and cost. Your text stays on your device. These counts are for OpenAI models; Claude counts tokens differently, so treat them as an estimate.</p>
+        <TokenCounter />
+      </section>
 
       <section className="panel" aria-labelledby="cf-leads">
         <h2 id="cf-leads">Leadership agents</h2>
@@ -37,47 +47,53 @@ export default function ContextForgePage() {
         </div>
       </section>
 
-      <div className="layout2">
-        <section className="panel" aria-labelledby="cf-tools">
-          <h2 id="cf-tools">Tool registry</h2>
-          <p className="small">Every tool is disabled and needs human approval. A link here means a likely upstream repository was named, not that its identity, licence or safety has been checked.</p>
-          <div className="tablewrap">
-            <table className="table">
-              <thead><tr><th scope="col">ID</th><th scope="col">Tool</th><th scope="col">Review status</th><th scope="col">State</th></tr></thead>
-              <tbody>
-                {candidateTools.map((t) => (
+      <section className="panel" aria-labelledby="cf-tools">
+        <h2 id="cf-tools">Tool registry</h2>
+        <p className="small">Sources checked on {SOURCE_CHECKED_ON} against PyPI and npm. Every tool other than the live one stays off, and the reason is shown for each.</p>
+        <div className="tablewrap">
+          <table className="table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Tool</th><th scope="col">Source check</th><th scope="col">State and reason</th></tr></thead>
+            <tbody>
+              {candidateTools.map((t) => {
+                const st = toolStatus[t.id];
+                const [tone, label] = stateTag[st.state];
+                return (
                   <tr key={t.id}>
-                    <td>{t.id}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}>{t.id}</td>
                     <td>
                       {t.repository
-                        ? <a className="link" href={t.repository} target="_blank" rel="noopener noreferrer">{t.name}<span className="sr-only"> (candidate repository, opens in a new tab)</span></a>
+                        ? <a className="link" href={t.repository} target="_blank" rel="noopener noreferrer">{t.name}<span className="sr-only"> (repository, opens in a new tab)</span></a>
                         : t.name}
                     </td>
-                    <td><span className={`tag ${t.repository ? 'approval' : 'warn'}`}>{verificationLabel[t.verification]}</span></td>
-                    <td><span className="tag">{t.enabled ? 'Enabled' : 'Disabled'}</span></td>
+                    <td className="small">
+                      {st.source
+                        ? <><span className="tag good">Repository matches</span><br />{st.source.registry} {st.source.pkg} {st.source.version}, {st.source.licence}, released {st.source.released}</>
+                        : <span className="tag warn">{t.repository ? 'Not on a registry' : 'No source'}</span>}
+                    </td>
+                    <td className="small"><span className={`tag ${tone}`}>{label}</span><br />{st.why}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div className="layout2">
+        <section className="panel" aria-labelledby="cf-approvals">
+          <h2 id="cf-approvals">Approval classes</h2>
+          {approvalClasses.map((c) => (
+            <div key={c.code} className="listrow">
+              <span className={`tag ${c.signOff ? 'approval' : 'good'}`}>{c.code}</span>
+              <div><strong className="rowtitle">{c.label}</strong><p className="small">{c.signOff ? 'Needs explicit human sign-off.' : 'Allowed within agreed scope.'}</p></div>
+            </div>
+          ))}
         </section>
 
-        <div>
-          <section className="panel" aria-labelledby="cf-approvals">
-            <h2 id="cf-approvals">Approval classes</h2>
-            {approvalClasses.map((c) => (
-              <div key={c.code} className="listrow">
-                <span className={`tag ${c.signOff ? 'approval' : 'good'}`}>{c.code}</span>
-                <div><strong className="rowtitle">{c.label}</strong><p className="small">{c.signOff ? 'Needs explicit human sign-off.' : 'Allowed within agreed scope.'}</p></div>
-              </div>
-            ))}
-          </section>
-
-          <section className="panel" aria-labelledby="cf-flow">
-            <h2 id="cf-flow">Research workflow</h2>
-            <ol className="small duties">{workflow.map((s) => <li key={s}>{s}</li>)}</ol>
-          </section>
-        </div>
+        <section className="panel" aria-labelledby="cf-flow">
+          <h2 id="cf-flow">Research workflow</h2>
+          <ol className="small duties">{workflow.map((s) => <li key={s}>{s}</li>)}</ol>
+        </section>
       </div>
 
       <div className="layout2">
