@@ -30,12 +30,16 @@ test('workforce shows 75 roles grouped by division and is searchable', async ({ 
   await noSideScroll(page);
 });
 
-test('character profile shows ten role-specific responsibilities and a portrait brief', async ({ page }) => {
+test('character profile shows ten role-specific responsibilities, a portrait and five videos', async ({ page }) => {
   await page.goto('/workforce/RF-063');
   await expect(page.getByRole('heading', { name: 'Celia Citation', level: 1 })).toBeVisible();
   await expect(page.locator('.duties').first().locator('li')).toHaveCount(10);
   await expect(page.getByText('Confirm quoted text appears exactly in the cited passage')).toBeVisible();
-  await expect(page.getByRole('img', { name: /Placeholder for Celia Citation/ })).toBeVisible();
+  await expect(page.getByRole('img', { name: /AI-generated portrait of fictional character Celia Citation/ })).toBeVisible();
+  const videoLinks = page.locator('.videos a');
+  await expect(videoLinks).toHaveCount(5);
+  await expect(videoLinks.first()).toHaveAttribute('href', /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{11}$/);
+  await expect(page.getByText('Inclusion is not endorsement')).toBeVisible();
   await noSideScroll(page);
 });
 

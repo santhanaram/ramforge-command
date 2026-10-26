@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { directReports, divisionNames, isVeraRole, roleById, workforce } from '@/data/workforce';
+import { portraits } from '@/data/portraits';
+import { videos, youtubeUrl } from '@/data/videos';
 
 describe('workforce directory', () => {
   it('has 75 roles: 5 heads, 10 leads, 60 specialists', () => {
@@ -43,5 +45,36 @@ describe('workforce directory', () => {
   it('uses no em dashes in user-facing copy', () => {
     const text = JSON.stringify(workforce);
     expect(text).not.toContain('—');
+  });
+});
+
+describe('portraits and videos', () => {
+  it('gives every role an AI-generated portrait marked as a fictional person', () => {
+    for (const r of workforce) {
+      const p = portraits[r.id];
+      expect(p, r.id).toBeDefined();
+      expect(p.src).toMatch(/^https:\/\//);
+      expect(p.alt).toContain(`fictional character ${r.name}`);
+      expect(p.appearance.length).toBeGreaterThan(10);
+    }
+  });
+
+  it('lists five distinct YouTube videos for every role, with no repeats across roles', () => {
+    const all: string[] = [];
+    for (const r of workforce) {
+      const list = videos[r.id] ?? [];
+      expect(list, r.id).toHaveLength(5);
+      for (const v of list) {
+        expect(v.id).toMatch(/^[\w-]{11}$/);
+        expect(v.title.length).toBeGreaterThan(3);
+        all.push(v.id);
+      }
+    }
+    expect(new Set(all).size).toBe(all.length);
+    expect(youtubeUrl('abcdefghijk')).toBe('https://www.youtube.com/watch?v=abcdefghijk');
+  });
+
+  it('uses no em dashes in portrait or video copy', () => {
+    expect(JSON.stringify({ portraits, videos })).not.toContain('—');
   });
 });

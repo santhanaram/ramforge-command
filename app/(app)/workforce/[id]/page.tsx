@@ -7,6 +7,7 @@ import { StatusTag } from '@/components/StatusTag';
 import { SubmitButton } from '@/components/SubmitButton';
 import { portraits } from '@/data/portraits';
 import { identityFor, portraitBrief } from '@/data/identities';
+import { videos, youtubeUrl } from '@/data/videos';
 import { directReports, roleById } from '@/data/workforce';
 import { getStore } from '@/lib/store';
 
@@ -19,6 +20,7 @@ export default async function RolePage({ params }: { params: Promise<{ id: strin
   const reports = directReports(role.id);
   const identity = identityFor(role);
   const portrait = portraits[role.id];
+  const roleVideos = videos[role.id] ?? [];
 
   return (
     <>
@@ -62,13 +64,21 @@ export default async function RolePage({ params }: { params: Promise<{ id: strin
             {!tasks.length && <p>No tasks assigned yet.</p>}
           </section>
           <section className="panel">
+            <h2>Learn the craft: five YouTube videos</h2>
+            {roleVideos.length ? (
+              <ol className="videos">
+                {roleVideos.map((v) => <li key={v.id}><a className="link" href={youtubeUrl(v.id)} target="_blank" rel="noopener noreferrer">{v.title}</a></li>)}
+              </ol>
+            ) : <p>No videos listed for this role yet.</p>}
+            <p className="small muted">Public videos found by web search for this role&apos;s subject area. Inclusion is not endorsement, and no creator listed here is affiliated with RAMFORGE. Links open YouTube in a new tab.</p>
+          </section>
+          <section className="panel">
             <h2>Portrait and identity</h2>
-            {portrait ? <p className="small">Portrait credit: {portrait.credit}. Licence: {portrait.licence}.</p> : <p className="small">No portrait supplied yet. The initials are a placeholder. Add a licensed or self-made image using the brief below.</p>}
+            {portrait ? <p className="small">This is a fictional person, not a real individual. Portrait credit: {portrait.credit}. Licence: {portrait.licence}.</p> : <p className="small">No portrait supplied yet. The initials are a placeholder. Add a licensed or self-made image using the brief below.</p>}
             <dl className="identity">
               <dt>Style</dt><dd>{identity.style}</dd>
               <dt>Framing</dt><dd>{identity.framing}</dd>
               <dt>Palette</dt><dd>{identity.palette}</dd>
-              <dt>Signature item</dt><dd>{identity.prop}</dd>
               <dt>Expression</dt><dd>{identity.expression}</dd>
               <dt>Appearance</dt><dd>{identity.appearance}</dd>
             </dl>

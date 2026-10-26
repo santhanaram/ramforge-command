@@ -105,6 +105,8 @@ a.listrow:hover .rowtitle, a.listrow:hover span { color: white; }
 .smallrow { display: flex; gap: 10px; align-items: center; }
 .profilehead { display: flex; gap: 16px; align-items: flex-start; }
 .duties li { padding: 5px 0; color: #c3d0e2; line-height: 1.5; }
+.videos { margin: 0 0 10px; padding-left: 20px; }
+.videos li { padding: 4px 0; line-height: 1.45; overflow-wrap: anywhere; }
 .identity { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; font-size: 12.5px; }
 .identity dt { color: #c3d0e2; font-weight: 600; }
 .identity dd { margin: 0; color: var(--muted); }

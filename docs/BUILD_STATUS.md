@@ -17,7 +17,8 @@ Last updated 2026-10-26. Only results that were actually run are listed as verif
 - Email magic-link sign-in has not been tested end to end (needs a real Supabase project and email delivery).
 - Live AI runs have not been executed: no API key was used. The live provider code type-checks against the Anthropic SDK but has not made a real call.
 - No deployment to Vercel has been made.
-- No portraits are included. Placeholders are shown until licensed or self-made images are added.
+- All 75 roles have an AI-generated photorealistic portrait of a fictional person (Higgsfield, gpt_image_2_5), listed in `data/portraits.ts` with alt text, credit and appearance notes. Images load from the Higgsfield CDN, so they depend on that CDN staying available. The initials placeholder remains as a fallback for any role without an entry.
+- Every role page lists five public YouTube videos for its subject area (`data/videos.ts`, 375 links, no repeats), found by web search on 2026-10-26. They are learning links only; inclusion is not endorsement. Links can go stale and should be rechecked.
 - No formal accessibility audit (WCAG) has been done beyond semantic markup, labels, focus styles and a phone-width layout check.
 
 ## Known limitations
