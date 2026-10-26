@@ -1,6 +1,7 @@
 // Visual identity sheet for each fictional character, so every portrait of a character stays consistent
-// across images and tools. Appearance details (face, hair, skin tone, age) are left for RAM to decide
-// and record here once chosen; nothing is assumed from a character's name.
+// across images and tools. The appearance comes from the portrait manifest once a portrait exists;
+// nothing is assumed from a character's name.
+import { portraits } from './portraits';
 import { workforce, type Role } from './workforce';
 
 const PROPS: [RegExp, string][] = [
@@ -25,18 +26,18 @@ export type Identity = { style: string; framing: string; palette: string; prop: 
 export function identityFor(role: Role): Identity {
   const prop = PROPS.find(([re]) => re.test(role.title))?.[1] ?? 'a tablet held at chest height';
   return {
-    style: 'Stylised 3D animated character, soft studio lighting, clean shapes, consistent across all 75 characters',
-    framing: 'Head and shoulders, three-quarter view, centred, square 1:1, plain gradient background',
-    palette: `Background and clothing accent in the ${role.division} division colour ${role.color}`,
+    style: 'Photorealistic corporate studio headshot of a fictional person, soft key light, consistent across all 75 characters',
+    framing: 'Shoulders-up, facing camera, centred, square 1:1, plain smooth backdrop',
+    palette: `Backdrop tinted to match the ${role.division} division colour ${role.color}`,
     prop,
     expression: role.level === 'head' ? 'Confident and calm' : role.level === 'lead' ? 'Focused and approachable' : 'Friendly and attentive',
-    appearance: 'To be chosen by RAM and recorded here, then reused for every image of this character',
+    appearance: portraits[role.id]?.appearance ?? 'To be chosen by RAM and recorded here, then reused for every image of this character',
   };
 }
 
 export function portraitBrief(role: Role) {
   const i = identityFor(role);
-  return `${i.style}. Fictional character "${role.name}", ${role.title}. ${i.framing}. ${i.palette}. Holding or wearing ${i.prop}. Expression: ${i.expression}. Appearance: ${i.appearance}. Original character, not based on any real person.`;
+  return `${i.style}. Fictional character "${role.name}", ${role.title}. ${i.framing}. ${i.palette}. Expression: ${i.expression}. Appearance: ${i.appearance}. Original character, not based on any real person.`;
 }
 
 export const identities = Object.fromEntries(workforce.map((r) => [r.id, identityFor(r)]));

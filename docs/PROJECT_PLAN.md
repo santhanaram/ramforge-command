@@ -9,4 +9,4 @@
 | M4 | Agent orchestration: provider calls, cost control, handoffs, logs | Done; simulated runs tested; live provider not yet exercised |
 | M5 | Governance: Vera review, RAM release, immutable audit trail | Done and tested |
 | M6 | Operations: monitoring, backups, WCAG review, CI and Vercel rollout | CI workflow in place; deployment awaits RAM's authorisation |
-| M7 | Portraits: licensed or self-made, consistent per character | System and briefs ready; images to be supplied |
+| M7 | Portraits: licensed or self-made, consistent per character | Done: 75 AI-generated photorealistic portraits of fictional people (Higgsfield), with alt text and credit in `data/portraits.ts`; served from the Higgsfield CDN, self-hosting optional |

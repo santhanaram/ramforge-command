@@ -26,7 +26,7 @@ Open http://localhost:3000. With no settings it runs in **demo mode**: data is h
 | AI agent runs | Simulated, no model called, zero cost, labelled | Anthropic API, server-side only, tokens and cost logged |
 | Vera review | Real deterministic evidence checks | Same |
 | RAM release gate | Enforced in code | Enforced by database triggers |
-| Portraits | Initials placeholders | Your licensed images once added |
+| Portraits | AI-generated portraits of fictional people | Same, or your own images |
 
 ## Tests
 
