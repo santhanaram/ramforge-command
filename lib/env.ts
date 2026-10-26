@@ -40,3 +40,9 @@ export function aiConfig(): AiConfig {
 export function demoWritesAllowed() {
   return process.env.NODE_ENV !== 'production' || process.env.ALLOW_PUBLIC_DEMO === 'true';
 }
+
+// Optional allow-list (comma separated). When set, only these accounts can use the workspace.
+export function emailAllowed(email: string | null) {
+  const list = (process.env.ALLOWED_EMAILS ?? '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+  return !list.length || (email !== null && list.includes(email.toLowerCase()));
+}

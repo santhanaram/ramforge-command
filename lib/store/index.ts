@@ -1,6 +1,6 @@
 import 'server-only';
 import { redirect } from 'next/navigation';
-import { demoWritesAllowed, supabaseConfigured } from '../env';
+import { demoWritesAllowed, emailAllowed, supabaseConfigured } from '../env';
 import { createClient } from '../supabase/server';
 import { demoStore } from './demo';
 import { supabaseStore } from './supabase';
@@ -13,5 +13,10 @@ export async function getStore(): Promise<Store> {
   const { data } = await db.auth.getClaims();
   const claims = data?.claims;
   if (!claims?.sub) redirect('/login');
-  return supabaseStore(db, claims.sub, typeof claims.email === 'string' ? claims.email : null);
+  const email = typeof claims.email === 'string' ? claims.email.toLowerCase() : null;
+  if (!emailAllowed(email)) {
+    await db.auth.signOut();
+    redirect(`/login?error=${encodeURIComponent('This account is not allowed in this workspace.')}`);
+  }
+  return supabaseStore(db, claims.sub, email);
 }

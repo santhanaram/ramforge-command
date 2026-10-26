@@ -1,14 +1,22 @@
-name: Build and typecheck
+name: Check
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  check:
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
-      - run: npm install
+      - run: npm ci
+      - run: npm audit --audit-level=high
       - run: npm run lint
+      - run: npm test
+      - name: Database security tests (throwaway local Postgres)
+        run: npm run test:db
       - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e

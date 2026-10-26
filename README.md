@@ -2,28 +2,52 @@
 
 **Independent five-division AI workforce operations platform**
 
-75 hierarchical roles | 5 division heads | 10 team leads | 60 task specialists | 750 prescribed responsibilities.
+75 roles (5 division heads, 10 team leads, 60 specialists), each with ten role-specific responsibilities.
+Tasks are run by server-side AI agents, checked by Vera's independent evidence review, and released only by RAM, the human owner.
 
-Built with Next.js, React, TypeScript, Tailwind-free custom responsive CSS, Supabase (optional), GitHub and Vercel. No third-party expert material is bundled. Initial research domain: Alex Hormozi, attribution/rights gated, no claimed endorsement.
+Built with Next.js 16, React 19, TypeScript, Supabase, GitHub and Vercel.
+Independent platform: not affiliated with or endorsed by Alex Hormozi or Acquisition.com. No third-party expert material is bundled.
 
-## Run
+## Run it on your computer
 
 ```bash
 npm install
 npm run dev
 ```
 
-Visit http://localhost:3000. See `docs/DEPLOYMENT_GUIDE.md` for Supabase/Vercel deployment. `CLAUDE.md` supplies complete Claude Code build instructions.
+Open http://localhost:3000. With no settings it runs in **demo mode**: data is held in memory and the AI is **simulated**. Both are labelled at the top of every page.
 
-## Current working features
-- Responsive command overview, division directory, 75 individual role cards and a searchable workforce.
-- Each role has manager, mission, strengths, skill sets, ten checklist responsibilities.
-- Task board with status transitions and create-task capability. Demo mode persists in browser storage.
-- Optional Supabase email sign-in, user-owned task records with RLS-backed schema.
-- Knowledge and approvals policy overview, GitHub/Vercel/Supabase links.
+## What is live and what is simulated
 
-## Not yet implemented
-Actual AI agents, external source intake, storage and framework RAG, expert quotations, generated character artwork, server-side agent scheduling, approval-event UI and production monitoring. The app carefully labels these limitations.
+| Feature | Without settings (demo) | With settings (live) |
+| --- | --- | --- |
+| Data | In server memory, resets on restart | Supabase Postgres with row-level security |
+| Sign-in | None | Email magic link (Supabase Auth, server-side cookies) |
+| AI agent runs | Simulated, no model called, zero cost, labelled | Anthropic API, server-side only, tokens and cost logged |
+| Vera review | Real deterministic evidence checks | Same |
+| RAM release gate | Enforced in code | Enforced by database triggers |
+| Portraits | Initials placeholders | Your licensed images once added |
+
+## Tests
+
+```bash
+npm run lint      # TypeScript type check
+npm test          # unit tests (workforce, retrieval, ingestion, Vera checks, orchestration, governance)
+npm run test:db   # database security tests on a throwaway local Postgres (needs PostgreSQL 15+ installed)
+npm run build
+npm run test:e2e  # browser tests on desktop and phone sizes (demo mode)
+```
+
+See `docs/BUILD_STATUS.md` for what has been verified and what has not.
+
+## Docs
+
+- `docs/DEPLOYMENT_GUIDE.md`: step-by-step setup for Supabase, GitHub and Vercel
+- `docs/ORCHESTRATION.md`: how tasks, runs, handoffs, reviews and releases work
+- `docs/DATA_MODEL.md`: tables, security rules and the source rights policy
+- `docs/PROJECT_PLAN.md`: milestones and status
+- `CLAUDE.md` and `AGENTS.md`: rules for AI coding assistants working on this repo
 
 ## Security
-No private API credentials in frontend. Supabase publishable key is public but protected by RLS. Do not store rights-restricted material before approval. Do not impersonate experts.
+
+No secrets in code or in browser variables. The Supabase publishable key is public by design and protected by row-level security. AI keys are server-only. Sources cannot be ingested until rights are approved with evidence.

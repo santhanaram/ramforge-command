@@ -1,14 +1,12 @@
 # RAMFORGE Command: milestone plan
 
-| Milestone | Deliverable | Acceptance criterion |
+| Milestone | Deliverable | Status (2026-10-26) |
 | --- | --- | --- |
-| M0 | Dashboard starter | `npm run lint` and `npm run build` pass, 75 roles with 10 tasks each, mobile layout |
-| M1 | Auth and persistence | Supabase signed-in task CRUD, RLS tested across two separate accounts |
-| M2 | Source clearance | rights status, reviewed provenance, sources cannot be processed while unapproved |
-| M3 | Knowledge engine | approved source chunks, framework provenance, citation-backed retrieval tests |
-| M4 | Agent orchestration | real provider calls with queue, cost control, handoffs and logs |
-| M5 | Governance | Vera review workflow, human release approvals, immutable audit trail |
-| M6 | Operations | monitoring, backups, dependency scanning, WCAG review, GitHub CI + Vercel rollout |
-
-### Goal and boundary
-The current artifact implements M0 plus a limited M1 client integration, not M2-M6. Do not portray placeholder division progress bars as actual metrics: replace them with computed role/task measures before production.
+| M0 | Dashboard, 75 roles with 10 role-specific responsibilities, mobile layout | Done and tested |
+| M1 | Supabase server-side auth, persistence, RLS tested across two accounts | Built; RLS tested on local Postgres; not yet on a real Supabase project |
+| M2 | Source clearance: rights status, evidence, no processing while unapproved | Done and tested (demo and database) |
+| M3 | Knowledge engine: approved chunks, provenance, citation-backed retrieval | Keyword retrieval done and tested; semantic search later |
+| M4 | Agent orchestration: provider calls, cost control, handoffs, logs | Done; simulated runs tested; live provider not yet exercised |
+| M5 | Governance: Vera review, RAM release, immutable audit trail | Done and tested |
+| M6 | Operations: monitoring, backups, WCAG review, CI and Vercel rollout | CI workflow in place; deployment awaits RAM's authorisation |
+| M7 | Portraits: licensed or self-made, consistent per character | System and briefs ready; images to be supplied |
