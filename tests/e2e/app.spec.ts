@@ -117,3 +117,14 @@ test('manual status changes cannot skip Vera or RAM', async ({ page }) => {
   const options = await page.locator('#status option').allTextContents();
   expect(options).toEqual(['queued', 'cancelled']);
 });
+
+test('ContextForge tab shows the plan with every tool disabled and clearly labelled', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('nav[aria-label="Main"]:visible').getByRole('link', { name: 'ContextForge' }).click();
+  await expect(page.getByRole('heading', { name: 'ContextForge AI Research Lab', level: 1 })).toBeVisible();
+  await expect(page.getByText('Planning view only.')).toBeVisible();
+  await expect(page.locator('#cf-tools + p + .tablewrap tbody tr')).toHaveCount(30);
+  await expect(page.locator('tbody').getByText('Enabled', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Vera Verification' })).toBeVisible();
+  await noSideScroll(page);
+});
