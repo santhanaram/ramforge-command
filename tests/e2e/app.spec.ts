@@ -118,13 +118,19 @@ test('manual status changes cannot skip Vera or RAM', async ({ page }) => {
   expect(options).toEqual(['queued', 'cancelled']);
 });
 
-test('ContextForge tab shows the plan with every tool disabled and clearly labelled', async ({ page }) => {
+test('ContextForge tab shows one live tool, a reason for every other, and a working token counter', async ({ page }) => {
   await page.goto('/');
   await page.locator('nav[aria-label="Main"]:visible').getByRole('link', { name: 'ContextForge' }).click();
   await expect(page.getByRole('heading', { name: 'ContextForge AI Research Lab', level: 1 })).toBeVisible();
-  await expect(page.getByText('Planning view only.')).toBeVisible();
-  await expect(page.locator('#cf-tools + p + .tablewrap tbody tr')).toHaveCount(30);
-  await expect(page.locator('tbody').getByText('Enabled', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Mostly a plan.')).toBeVisible();
+  const rows = page.locator('#cf-tools + p + .tablewrap tbody tr');
+  await expect(rows).toHaveCount(30);
+  await expect(rows.locator('.tag', { hasText: /^Live$/ })).toHaveCount(1);
+  await expect(rows.locator('.tag', { hasText: /^Blocked$/ })).toHaveCount(1);
+  await page.getByLabel('Text to count').fill('hello world');
+  await expect(page.getByText('2 tokens')).toBeVisible();
+  await page.getByLabel('Encoding').selectOption('cl100k_base');
+  await expect(page.getByText('2 tokens')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Vera Verification' })).toBeVisible();
   await noSideScroll(page);
 });

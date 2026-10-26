@@ -1,6 +1,6 @@
 // ContextForge AI Research Lab: a planning package for a research orchestration lab, shown read-only in its own tab.
 // Source of truth for the tool list is docs/contextforge/tools.json, copied unchanged from the package.
-// Nothing here is installed, connected or run. Every tool is a candidate and stays disabled.
+// toolStatus below records what was checked and connected. Only tools marked 'live' do anything.
 import tools from '@/docs/contextforge/tools.json';
 
 export type CandidateTool = {
@@ -17,6 +17,57 @@ export const candidateTools = tools as CandidateTool[];
 export const verificationLabel: Record<CandidateTool['verification'], string> = {
   unverified_identity: 'Identity unverified',
   candidate_link_review_required: 'Link found, review needed',
+};
+
+// Phase 0 source check, done 2026-10-26: does the package registry entry point back to the same GitHub repository?
+// Licence and last release are as published on the registry for the package, not a full legal review.
+export const SOURCE_CHECKED_ON = '2026-10-26';
+
+export type SourceCheck = { registry: 'PyPI' | 'npm'; pkg: string; version: string; released: string; licence: string };
+
+export type ToolStatus = {
+  state: 'live' | 'off' | 'blocked';
+  source?: SourceCheck;
+  why: string;
+};
+
+const noSource = 'No source to check. The package names this tool but gives no repository, so it cannot be identified or connected.';
+
+export const toolStatus: Record<string, ToolStatus> = {
+  'T-01': { state: 'off', why: noSource },
+  'T-02': { state: 'off', why: noSource },
+  'T-03': { state: 'off', why: noSource },
+  'T-04': { state: 'off', why: noSource },
+  'T-05': {
+    state: 'live',
+    source: { registry: 'PyPI', pkg: 'tiktoken', version: '0.14.0', released: '2026-08-17', licence: 'MIT' },
+    why: 'Connected as the token counter below. It uses js-tiktoken 1.0.21 (MIT), a JavaScript port, and runs in your browser. Counts are for OpenAI models, not Claude.',
+  },
+  'T-06': { state: 'off', source: { registry: 'PyPI', pkg: 'llmlingua', version: '0.2.2', released: '2024-04-09', licence: 'MIT' }, why: 'Python only and needs a downloaded language model, so it needs a separate worker server. No release since April 2024.' },
+  'T-07': { state: 'off', source: { registry: 'PyPI', pkg: 'gptcache', version: '0.1.44', released: '2024-08-01', licence: 'MIT' }, why: 'Python cache service that needs a worker and storage. No release since August 2024.' },
+  'T-08': { state: 'off', source: { registry: 'PyPI', pkg: 'litellm', version: '1.106.4', released: '2026-10-25', licence: 'MIT' }, why: 'Python model gateway. Only useful with paid model provider keys (P2), and needs a worker.' },
+  'T-09': { state: 'off', source: { registry: 'PyPI', pkg: 'outlines', version: '1.3.3', released: '2026-08-06', licence: 'Apache-2.0' }, why: 'Python library that needs a language model to drive it, so it needs a worker and a model.' },
+  'T-10': { state: 'off', source: { registry: 'PyPI', pkg: 'vllm', version: '0.32.0', released: '2026-10-18', licence: 'Apache-2.0' }, why: 'Model serving engine. Needs a paid GPU server (P2).' },
+  'T-11': { state: 'off', source: { registry: 'PyPI', pkg: 'openhands-ai', version: '1.11.0', released: '2026-07-09', licence: 'MIT' }, why: 'Runs coding agents in containers. Needs a container host and a paid model key (P2, P3 if it deploys).' },
+  'T-12': { state: 'off', why: noSource },
+  'T-13': { state: 'off', why: noSource },
+  'T-14': { state: 'off', why: noSource },
+  'T-15': { state: 'off', why: noSource },
+  'T-16': { state: 'off', why: noSource },
+  'T-17': { state: 'off', why: noSource },
+  'T-18': { state: 'off', why: noSource },
+  'T-19': { state: 'off', why: noSource },
+  'T-20': { state: 'off', why: noSource },
+  'T-21': { state: 'off', source: { registry: 'PyPI', pkg: 'firecrawl-py', version: '4.54.0', released: '2026-10-22', licence: 'MIT (client library)' }, why: 'Hosted crawling service that needs a paid account key (P2). Crawling also needs sign-in and a domain allowlist first.' },
+  'T-22': { state: 'off', source: { registry: 'PyPI', pkg: 'crawl4ai', version: '0.9.5', released: '2026-10-14', licence: 'Apache-2.0' }, why: 'Python with a headless browser, so it needs a worker. Crawling (P1) also needs sign-in and a domain allowlist.' },
+  'T-23': { state: 'off', source: { registry: 'PyPI', pkg: 'browser-use', version: '0.13.11', released: '2026-10-07', licence: 'MIT' }, why: 'Drives a real browser with an AI model. Needs a worker, a paid model key and P2 approval.' },
+  'T-24': { state: 'off', source: { registry: 'npm', pkg: 'crawlee', version: '3.18.2', released: '2026-10-25', licence: 'Apache-2.0' }, why: 'Could run on this site, but anyone could then crawl from it: the site has no sign-in, and the plan forbids anonymous tool runs. Needs sign-in and a domain allowlist first.' },
+  'T-25': { state: 'off', source: { registry: 'PyPI', pkg: 'scrapy', version: '2.19.0', released: '2026-09-10', licence: 'BSD-3-Clause' }, why: 'Python crawler, so it needs a worker. Crawling (P1) also needs sign-in and a domain allowlist.' },
+  'T-26': { state: 'off', source: { registry: 'PyPI', pkg: 'markitdown', version: '0.1.9', released: '2026-10-21', licence: 'MIT' }, why: 'Python only, so it needs a worker. The plan names it as the first Phase 2 tool.' },
+  'T-27': { state: 'off', source: { registry: 'PyPI', pkg: 'scrapling', version: '0.5', released: '2026-10-17', licence: 'BSD-3-Clause' }, why: 'Python, so it needs a worker. It also advertises stealth fetching to get past anti-bot protection, which the security policy forbids, so it needs a careful review.' },
+  'T-28': { state: 'off', why: 'Desktop app that mirrors and controls an Android phone over USB. It cannot run on a website. Not on a package registry, so its source was not checked.' },
+  'T-29': { state: 'off', source: { registry: 'PyPI', pkg: 'autoscraper', version: '1.1.14', released: '2022-07-17', licence: 'MIT' }, why: 'Python, so it needs a worker. No release since July 2022, so it looks unmaintained.' },
+  'T-30': { state: 'blocked', why: 'Blocked by policy. It copies real browsers\' fingerprints to get past access controls, and the governance rules say never to do that.' },
 };
 
 export type ForgeLead = { name: string; title: string; mission: string; brief: string };

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { approvalClasses, candidateTools, forgeLeads, leadCharter } from '@/data/contextforge';
+import { approvalClasses, candidateTools, forgeLeads, leadCharter, toolStatus } from '@/data/contextforge';
 
 describe('ContextForge plan', () => {
   it('lists 30 unique candidate tools, all disabled and approval-gated', () => {
@@ -18,6 +18,18 @@ describe('ContextForge plan', () => {
         expect(t.verification).toBe('candidate_link_review_required');
       } else expect(t.verification).toBe('unverified_identity');
     }
+  });
+
+  it('gives every tool a status and reason, with only Tiktoken live and curl-impersonate blocked', () => {
+    expect(Object.keys(toolStatus).sort()).toEqual(candidateTools.map((t) => t.id).sort());
+    for (const t of candidateTools) expect(toolStatus[t.id].why.length, t.name).toBeGreaterThan(20);
+    expect(candidateTools.filter((t) => toolStatus[t.id].state === 'live').map((t) => t.name)).toEqual(['Tiktoken']);
+    expect(candidateTools.filter((t) => toolStatus[t.id].state === 'blocked').map((t) => t.name)).toEqual(['curl-impersonate']);
+  });
+
+  it('only records a source check for tools that name a repository', () => {
+    for (const t of candidateTools) if (toolStatus[t.id].source) expect(t.repository, t.name).not.toBeNull();
+    expect(candidateTools.filter((t) => toolStatus[t.id].source)).toHaveLength(15);
   });
 
   it('has five leads with a ten-step charter and sign-off on P2 and P3', () => {
