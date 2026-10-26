@@ -1,52 +1,72 @@
-# RAMFORGE Command: beginner deployment guide
+# RAMFORGE Command: beginner setup guide
 
-## 1. Install and preview locally
-Install Node.js 22 or a compatible supported Node version, download and unzip the project, open its directory in VS Code, then:
+This guide takes you from the code on GitHub to a private, live app. Do the steps in order. Nothing here needs you to share a key with anyone, including an AI assistant.
+
+## 1. Try it on your computer (optional)
+
+1. Install Node.js 22 from nodejs.org.
+2. Download the repository (GitHub, green **Code** button, **Download ZIP**) and unzip it, or use `git clone`.
+3. Open a terminal in the folder and run:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. Without credentials the dashboard works in demonstration mode using browser-local task records. Role profiles and all 750 prescribed responsibilities are navigable. Character initials are placeholders; no Pixar-like portraits are bundled.
+4. Open http://localhost:3000. You are in demo mode: sample data and simulated AI, both labelled at the top of the page.
 
-## 2. Create Supabase
-Create a **new**, dedicated project in the Supabase dashboard. In SQL Editor inspect and apply `supabase/migrations/20261026000000_initial.sql`. Configure email authentication and authorized redirect URLs. For local testing add `http://localhost:3000`; for production add your final Vercel URL. Supabase email delivery configuration may need adjustment for real users. Test owner isolation with two accounts before production.
+## 2. Create the Supabase database
 
-Copy `.env.example` to `.env.local` and fill in the project URL and **publishable** API key:
+1. Go to supabase.com, sign in and create a **new project** just for RAMFORGE. Save the database password somewhere safe.
+2. In the project, open **SQL Editor**. Paste the contents of `supabase/migrations/20261026000000_initial.sql` and click **Run**. Then do the same with `supabase/migrations/20261027000000_workforce_core.sql`. Run them in that order, once each.
+3. Open **Authentication > Sign In / Providers** and make sure **Email** is enabled.
+4. Open **Authentication > URL Configuration**. Set **Site URL** to your app address (for now `http://localhost:3000`) and add `http://localhost:3000/auth/callback` under **Redirect URLs**. You will add the Vercel address in step 4.
+5. Open **Project Settings > API Keys** (or **Connect**) and copy the **Project URL** and the **publishable** key. Do not copy the secret or service_role key; this app never needs it.
+
+## 3. Connect your computer to Supabase (optional)
+
+Copy `.env.example` to a new file named `.env.local` and fill in:
 
 ```dotenv
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
+ALLOWED_EMAILS=you@example.com
+ALLOW_SIGNUPS=true
 ```
 
-Never use service_role or secret keys in browser-accessible variables. Restart `npm run dev` and use Settings to sign in via email. The Tasks board uses Supabase for signed-in assignments.
+Restart `npm run dev`. You will be sent to the sign-in page. Enter your email, click the link in the email, and you are in. After your account exists, set `ALLOW_SIGNUPS=` (empty) so nobody else can create one, and in Supabase turn off **Allow new users to sign up** under Authentication settings.
 
-## 3. Publish with GitHub
-Create a **private** repository. Run these commands in the project directory:
-
-```bash
-git init
-git add .
-git commit -m "Initial RAMFORGE Command dashboard"
-git branch -M main
-git remote add origin https://github.com/YOUR_ACCOUNT/YOUR_REPOSITORY.git
-git push -u origin main
-```
-
-Never commit `.env.local`; it is gitignored. The supplied workflow typechecks and builds after pushes and pull requests.
+`.env.local` is ignored by git, so it is never uploaded.
 
 ## 4. Deploy with Vercel
-In Vercel, select Add New Project, import the GitHub repository, keep the Next.js framework preset, add the two NEXT_PUBLIC Supabase variables in Vercel Project Settings (not in source files), and deploy. Add your final deployment URL in Supabase authentication redirect settings. Sign in and create a task to verify persistence.
 
-## 5. Acceptance checklist
-- Home loads on desktop and mobile.
-- Workforce count is 75 with exactly 5 heads, 10 leads, and 60 specialists.
-- Role details show 10 responsibilities and correct reporting lines.
-- Demo mode explicitly identifies local-only assignments.
-- Authenticated tasks appear after reload and do not appear in another user's account.
-- Source materials stay unapproved until rights clearance.
-- AI execution is not falsely labelled live.
+1. Go to vercel.com and sign in with GitHub.
+2. Click **Add New > Project**, choose `santhanaram/ramforge-command`, keep the Next.js preset.
+3. Before clicking Deploy, open **Environment Variables** and add the same values as step 3 (URL, publishable key, `ALLOWED_EMAILS`, and `ALLOW_SIGNUPS=true` only until your account exists).
+4. Deploy. When it finishes, copy the address (for example `https://ramforge-command.vercel.app`).
+5. Back in Supabase **URL Configuration**, set **Site URL** to that address and add `https://YOUR-ADDRESS/auth/callback` to **Redirect URLs**.
+6. Open the address, sign in, and create a task. Reload the page: the task should still be there.
 
-## 6. Known limitations
-Dashboard v1 does not include a working agent execution backend, automated transcripts, source file storage, role portraits, live approval event entry, framework retrieval, or billing. These require subsequent implementation. Do not describe the starter as production-ready automation.
+## 5. Turn on live AI (optional, costs money)
+
+1. Create an API key at console.anthropic.com and set a monthly spend limit there.
+2. In Vercel **Settings > Environment Variables**, add `ANTHROPIC_API_KEY` with the key. Optionally set `AI_DAILY_BUDGET_USD` (default 5). Never put the key in a `NEXT_PUBLIC_` variable or in the code.
+3. Redeploy. The top bar changes from "AI: simulated" to "AI: live". Every run then shows its tokens and cost.
+
+## 6. Acceptance checklist
+
+- [ ] Home loads on desktop and phone, and the top bar shows live database and the correct AI mode.
+- [ ] Workforce shows 75 roles: 5 heads, 10 leads, 60 specialists, each with 10 responsibilities.
+- [ ] A task you create is still there after reload, and is not visible from a second test account.
+- [ ] A pending source cannot be given text until its rights are approved with evidence.
+- [ ] A task cannot be released before Vera's review passes, and release asks for your rationale.
+- [ ] Runs are labelled live or simulated, with tokens and cost.
+
+## Running the tests
+
+```bash
+npm run lint && npm test && npm run build && npm run test:e2e
+npm run test:db   # needs PostgreSQL 15 or newer installed locally
+```
+
+GitHub runs all of these automatically on every push and pull request (see the **Actions** tab).

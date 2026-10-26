@@ -6,10 +6,10 @@ You are the lead engineer and product architect implementing the standalone RAMF
 Deliver a production-grade AI workforce operations dashboard deployed using GitHub, Vercel and Supabase, managing five divisions, ten team leads and sixty specialists with alliterative names and ten role responsibilities each.
 
 ## Project context
-This repository contains a working Next.js dashboard starter with all 75 roles generated in `data/workforce.ts`, local demonstration assignments, a Supabase email-login option, user-owned assignment CRUD (create/read/update), and a first SQL migration. It is **not** yet an autonomous agent execution platform. Initial subject: attributed educational content from Alex Hormozi, with content rights respected and no impersonation.
+This repository is a Next.js 16 app with all 75 roles in `data/workforce.ts`, a demo store and a Supabase store behind one interface (`lib/store`), server-side agent orchestration with a simulated provider and an Anthropic provider (`lib/orchestrator.ts`, `lib/ai`), rights-gated source ingestion and retrieval, Vera's deterministic evidence checks and RAM's release gate. See `docs/BUILD_STATUS.md` for what is verified. Initial subject: attributed educational content from Alex Hormozi, with content rights respected and no impersonation.
 
 ## First instruction
-Read `AGENTS.md`, `docs/PROJECT_PLAN.md`, `docs/ORCHESTRATION.md`, `docs/DEPLOYMENT_GUIDE.md`, `docs/DATA_MODEL.md` and inspect the actual code. Run `npm install`, `npm run lint`, and `npm run build` before changing the architecture. Report what is functional versus scaffolded; never invent test outcomes.
+Read `AGENTS.md`, `docs/PROJECT_PLAN.md`, `docs/ORCHESTRATION.md`, `docs/DEPLOYMENT_GUIDE.md`, `docs/DATA_MODEL.md` and inspect the actual code. Run `npm install`, `npm run lint`, `npm test`, `npm run test:db`, `npm run build` and `npm run test:e2e` before changing the architecture. Report what is functional versus scaffolded; never invent test outcomes.
 
 ## Build sequence
 1. Verify install, build, responsive design, accessible navigation and 75 role records.
